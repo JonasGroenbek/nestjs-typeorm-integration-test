@@ -1,0 +1,34 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@4.7
+jobs:
+  run-tests:
+    docker:
+      - image: cimg/node:16.10
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: secret
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+      - image: cimg/postgres:13.5
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: secret
+    steps: 
+      - checkout
+      - node/install-packages:
+        -pkg-manager: npm
+      - run:
+        name: Run migrations
+        command: npm run migration:up
+      -run:
+        name: Run tests
+        command: npm run test:ci
+
+  workflows:
+    ci_pipeline:
+      jobs:
+        - run-tests
