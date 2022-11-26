@@ -17,18 +17,17 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_DB: postgres
           POSTGRES_PASSWORD: secret
-    steps: 
+    steps:
       - checkout
       - node/install-packages:
-        pkg-manager: npm
+          pkg-manager: npm
       - run:
-        name: Run migrations
-        command: npm run migration:up
-      -run:
-        name: Run tests
-        command: npm run test:ci
-
-  workflows:
-    ci_pipeline:
-      jobs:
-        - run-tests
+          name: Run migrations
+          command: npm run migration:up
+      - run:
+          name: Run tests
+          command: npm run test:ci
+workflows:
+  ci_pipeline:
+    jobs:
+      - run-tests
